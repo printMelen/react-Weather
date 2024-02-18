@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import Entrada from "./Entrada.jsx";
 import Card from "./Card.jsx";
+import CardError from "./CardError.jsx";
 
 const Contenedor = () => {
   const [data, setData] = useState();
+  const [error, setError] = useState(false);
   const [formData, setFormData] = useState(
     {
       ciudad: localStorage.getItem("ciudad") || "Salamanca",
@@ -20,7 +22,7 @@ const Contenedor = () => {
       pais: pais
     });
   };
-  
+
   useEffect(() => {
     const fetchData = async () => {
       const http_request = new XMLHttpRequest();
@@ -44,6 +46,10 @@ const Contenedor = () => {
             localStorage.setItem("pais", formData.pais);
             setData(respuesta);
             console.log(respuesta);
+          }else
+          {
+            setError(true);
+            // setMostrarComponente(true);
           }
         }
       };
@@ -129,6 +135,7 @@ const Contenedor = () => {
           Consultar Clima
         </button>
       </form>
+      <CardError error={error}></CardError>
       {data ? <Card data={data}></Card> : null}
     </>
   );
