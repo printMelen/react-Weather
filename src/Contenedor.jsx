@@ -12,6 +12,18 @@ const Contenedor = () => {
       pais: localStorage.getItem("pais") || "ES",
     }
   );
+// Función para establecer una cookie con expiración en una hora
+  function setCookie(nombre, valor) {
+  // Crear una fecha de expiración en una hora
+    var fechaExpiracion = new Date();
+    fechaExpiracion.setTime(fechaExpiracion.getTime() + (1 * 60 * 60 * 1000)); // 1 hora en milisegundos
+
+  // Crear la cadena de cookie con el nombre, valor y fecha de expiración
+    var cookieString = nombre + "=" + valor + "; expires=" + fechaExpiracion.toUTCString() + "; path=/";
+
+  // Establecer la cookie en el documento
+    document.cookie = cookieString;
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -44,6 +56,7 @@ const Contenedor = () => {
             const respuesta = JSON.parse(http_request.responseText);
             localStorage.setItem("ciudad", formData.ciudad);
             localStorage.setItem("pais", formData.pais);
+            setCookie("CiudadPais", `${formData.ciudad},${formData.pais}`);
             setData(respuesta);
             console.log(respuesta);
           }else
